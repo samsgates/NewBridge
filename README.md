@@ -10,6 +10,12 @@ NewBridge gives application developers a typed, resilient and policy-aware way t
 
 A normal ServiceNow integration quickly grows beyond CRUD. Teams repeatedly rebuild OAuth handling, encoded queries, pagination, retries, rate-limit handling, schema types, queues, observability, audit trails, local mocks and AI safety controls. NewBridge centralizes those concerns while keeping ServiceNow ACLs authoritative.
 
+![NewBridge Features](media_resources/features.png)
+
+## How It Works
+
+![How NewBridge Works](media_resources/howitsworks.png)
+
 ## Packages
 
 | Package | Purpose |
@@ -227,6 +233,8 @@ npm test
 ```
 
 ## Architecture
+
+![NewBridge Architecture](media_resources/architecture_diagram.png)
 
 ```text
 Applications / DevOps / AI Agents
