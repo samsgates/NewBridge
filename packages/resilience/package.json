@@ -1,0 +1,38 @@
+{
+  "name": "@newbridge/resilience",
+  "version": "0.1.0",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "dev": "node --enable-source-maps dist/index.js",
+    "prepack": "npm run build"
+  },
+  "dependencies": {},
+  "license": "Apache-2.0",
+  "engines": {
+    "node": ">=22"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "sideEffects": false,
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/your-org/newbridge.git"
+  },
+  "homepage": "https://github.com/your-org/newbridge#readme",
+  "bugs": {
+    "url": "https://github.com/your-org/newbridge/issues"
+  }
+}

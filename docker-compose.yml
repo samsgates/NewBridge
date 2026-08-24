@@ -1,0 +1,50 @@
+services:
+  postgres:
+    image: postgres:17-alpine
+    environment:
+      POSTGRES_USER: newbridge
+      POSTGRES_PASSWORD: newbridge
+      POSTGRES_DB: newbridge
+    volumes:
+      - newbridge-postgres:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U newbridge"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  redis:
+    image: redis:7-alpine
+    command: ["redis-server", "--appendonly", "yes"]
+    volumes:
+      - newbridge-redis:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  gateway:
+    build: .
+    ports:
+      - "8080:8080"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    environment:
+      HOST: 0.0.0.0
+      PORT: 8080
+      DATABASE_URL: postgres://newbridge:newbridge@postgres:5432/newbridge
+      REDIS_URL: redis://redis:6379
+      NEWBRIDGE_GATEWAY_API_KEY: ${NEWBRIDGE_GATEWAY_API_KEY:-development-only-change-me}
+      NEWBRIDGE_CONNECTOR_SECRET: ${NEWBRIDGE_CONNECTOR_SECRET:-ZGV2ZWxvcG1lbnQtY29ubmVjdG9yLXNlY3JldA==}
+      NEWBRIDGE_CONNECTIONS_JSON: >-
+        [{"name":"dev","instance":"${SERVICENOW_INSTANCE}","auth":{"type":"bearer","token":"${SERVICENOW_TOKEN}"},"resilience":{"retries":3,"concurrency":10,"circuitBreaker":true}}]
+      NEWBRIDGE_POLICY_JSON: >-
+        {"default":"deny","allow":[{"tables":["incident","problem","change_request","cmdb_ci"],"operations":["read"]}],"deny":[],"approvals":[],"redaction":{"fields":["password","token","secret"],"regex":[]}}
+
+volumes:
+  newbridge-postgres:
+  newbridge-redis:

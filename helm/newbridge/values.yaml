@@ -1,0 +1,37 @@
+replicaCount: 2
+image:
+  repository: ghcr.io/your-org/newbridge
+  tag: "0.1.0"
+  pullPolicy: IfNotPresent
+service:
+  type: ClusterIP
+  port: 8080
+resources:
+  requests:
+    cpu: 100m
+    memory: 128Mi
+  limits:
+    cpu: "1"
+    memory: 512Mi
+env:
+  HOST: 0.0.0.0
+  PORT: "8080"
+secretEnv:
+  DATABASE_URL: ""
+  REDIS_URL: ""
+  NEWBRIDGE_GATEWAY_API_KEY: ""
+  NEWBRIDGE_CONNECTIONS_JSON: ""
+  NEWBRIDGE_POLICY_JSON: ""
+ingress:
+  enabled: false
+  className: ""
+  host: newbridge.example.com
+  tlsSecret: ""
+autoscaling:
+  enabled: false
+  minReplicas: 2
+  maxReplicas: 10
+  targetCPUUtilizationPercentage: 70
+podDisruptionBudget:
+  enabled: true
+  minAvailable: 1

@@ -1,0 +1,18 @@
+{
+  "incident": [
+    {
+      "sys_id": "00000000000000000000000000000001",
+      "number": "INC0000001",
+      "short_description": "Example emulator incident",
+      "active": true,
+      "priority": "2"
+    }
+  ],
+  "sys_user": [
+    {
+      "sys_id": "00000000000000000000000000000002",
+      "name": "Example User",
+      "active": true
+    }
+  ]
+}

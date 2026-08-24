@@ -1,0 +1,40 @@
+version: 1
+defaultConnection: dev
+connections:
+  dev:
+    instance: ${SERVICENOW_INSTANCE}
+    auth:
+      type: bearer
+      token: ${SERVICENOW_TOKEN}
+    timeoutMs: 30000
+    resilience:
+      retries: 3
+      concurrency: 10
+      circuitBreaker: true
+
+gateway:
+  databaseUrl: ${DATABASE_URL:-postgres://newbridge:newbridge@localhost:5432/newbridge}
+  redisUrl: ${REDIS_URL:-redis://localhost:6379}
+  apiKeys:
+    - ${NEWBRIDGE_GATEWAY_API_KEY}
+  host: 0.0.0.0
+  port: 8080
+  allowRawQuery: false
+  policy:
+    default: deny
+    allow:
+      - tables: [incident, problem, change_request]
+        operations: [read]
+      - tables: [incident]
+        operations: [create, update]
+        fields: [short_description, description, work_notes, state]
+    deny:
+      - tables: [sys_user]
+        operations: [create, update, delete]
+    approvals:
+      - tables: [change_request]
+        operations: [create, update, delete]
+        reason: Human approval required for change operations
+    redaction:
+      fields: [password, token, secret]
+      regex: []
